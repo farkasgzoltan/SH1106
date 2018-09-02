@@ -42,8 +42,16 @@ However, SH1106 driver don't provide several functions such as scroll commands.
 #include "Adafruit_GFX.h"
 #include "SH1106.h"
 
-// the memory buffer for the LCD
+typedef enum
+{
+    HORIZONTAL = 0,
+    VERTICAL,
+    PAGE,
+    INVALID,
+    END_MEMORY_ADDRESSING_MODES
+} MEMORY_ADDRESSING_MODES;
 
+// the memory buffer for the LCD
 static uint8_t buffer[SH1106_LCDHEIGHT * SH1106_LCDWIDTH / 8] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -502,6 +510,13 @@ void SH1106::dim(boolean dim) {
   // it is useful to dim the display
   SH1106_command(SH1106_SETCONTRAST);
   SH1106_command(contrast);
+}
+
+void SH1106::dimit(uint8_t contrast) {
+  // the range of contrast to too small to be really useful
+  // it is useful to dim the display
+  ssd1306_command(SH1106_SETCONTRAST);
+  ssd1306_command(contrast);
 }
 
 /*#define SH1106_SETLOWCOLUMN 0x00
