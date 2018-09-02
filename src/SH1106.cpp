@@ -25,11 +25,19 @@ However, SH1106 driver don't provide several functions such as scroll commands.
 
 
 *********************************************************************/
-#if defined(ESP32)
+#ifdef __AVR__
+  #include <avr/pgmspace.h>
+#elif defined(ESP8266) || defined(ESP32)
  #include <pgmspace.h>
 #else
-#error this library has been modified by @stickbreaker to increase i2c performance. It will only work with Arduino-Espressif 1.0.0-rc3 and later.
+ #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #endif
+//#error this library has been modified by @stickbreaker to increase i2c performance. It will only work with Arduino-Espressif 1.0.0-rc3 and later.
+
+#if !defined(__ARM_ARCH) && !defined(ENERGIA) && !defined(ESP8266) && !defined(ESP32) && !defined(__arc__)
+ #include <util/delay.h>
+#endif
+#include <stdlib.h>
 
 #include "Adafruit_GFX.h"
 #include "SH1106.h"
@@ -483,9 +491,6 @@ void SH1106::display(void) {
     SH1106_command(SH1106_SETHIGHCOLUMN | 0x0);  // hi col = 0
     SH1106_command(SH1106_SETSTARTLINE | 0x0); // line #0
 
-
-
-
     //Serial.println(TWBR, DEC);
     //Serial.println(TWSR & 0x3, DEC);
 
@@ -528,6 +533,10 @@ void SH1106::display(void) {
 
     }
     else {
+#ifdef TWBR
+      uint8_t twbrbackup = TWBR;
+      TWBR = 12; // upgrade to 400KHz!
+#endif
       for ( i = 0; i < height; i++) {
         // send a bunch of data in one xmission
         SH1106_command(0xB0 + i + m_row);//set page address
@@ -542,6 +551,9 @@ void SH1106::display(void) {
             }
                 Wire.endTransmission();
         }
+#ifdef TWBR
+        TWBR = twbrbackup;
+#endif
       }
     }
 }
