@@ -450,6 +450,7 @@ void SH1106::startscrolldiagleft(uint8_t start, uint8_t stop){
 void SH1106::stopscroll(void){
   SH1106_command(SH1106_DEACTIVATE_SCROLL);
 }
+*/
 
 // Dim the display
 // dim = true: display is dimmed
@@ -470,7 +471,7 @@ void SH1106::dim(boolean dim) {
   // it is useful to dim the display
   SH1106_command(SH1106_SETCONTRAST);
   SH1106_command(contrast);
-}*/
+}
 
 /*#define SH1106_SETLOWCOLUMN 0x00
 #define SH1106_SETHIGHCOLUMN 0x10
@@ -491,67 +492,58 @@ void SH1106::display(void) {
     // I2C
     //height >>= 3;
     //width >>= 3;
-	byte height=64;
-	byte width=132;
-	byte m_row = 0;
-	byte m_col = 2;
+    byte height=64;
+    byte width=132;
+    byte m_row = 0;
+    byte m_col = 2;
 
 
-	height >>= 3;
-	width >>= 3;
-	//Serial.println(width);
+    height >>= 3;
+    width >>= 3;
+    //Serial.println(width);
 
-	int p = 0;
+    int p = 0;
+    byte i, j, k =0;
 
-	byte i, j, k =0;
-
-	if(sid != -1)
-	{
-
-		for ( i = 0; i < height; i++) {
-
-		// send a bunch of data in one xmission
+    if(sid != -1)
+    {
+      for ( i = 0; i < height; i++) {
+        // send a bunch of data in one xmission
         SH1106_command(0xB0 + i + m_row);//set page address
         SH1106_command(m_col & 0xf);//set lower column address
         SH1106_command(0x10 | (m_col >> 4));//set higher column address
 
         for( j = 0; j < 8; j++){
-			// SPI
-			  digitalWrite(cs, HIGH);
-    digitalWrite(dc, HIGH);
-    digitalWrite(cs, LOW);
+            // SPI
+            digitalWrite(cs, HIGH);
+            digitalWrite(dc, HIGH);
+            digitalWrite(cs, LOW);
 
             for ( k = 0; k < width; k++, p++) {
-					fastSPIwrite(buffer[p]);
+                fastSPIwrite(buffer[p]);
             }
               digitalWrite(cs, HIGH);
-
         }
-		}
+      }
 
-	}
-	else{
-
-
-	for ( i = 0; i < height; i++) {
-
-		// send a bunch of data in one xmission
+    }
+    else {
+      for ( i = 0; i < height; i++) {
+        // send a bunch of data in one xmission
         SH1106_command(0xB0 + i + m_row);//set page address
         SH1106_command(m_col & 0xf);//set lower column address
         SH1106_command(0x10 | (m_col >> 4));//set higher column address
 
         for( j = 0; j < 8; j++){
-			Wire.beginTransmission(_i2caddr);
+            Wire.beginTransmission(_i2caddr);
             Wire.write(0x40);
             for ( k = 0; k < width; k++, p++) {
-		Wire.write(buffer[p]);
+                Wire.write(buffer[p]);
             }
-            Wire.endTransmission();
-        	}
-	}
-
-
-	}
+                Wire.endTransmission();
+        }
+      }
+    }
 }
 
 void SH1106::clearDisplay(void) {
@@ -560,7 +552,6 @@ void SH1106::clearDisplay(void) {
 
 
 inline void SH1106::fastSPIwrite(uint8_t d) {
-
   if(hwSPI) {
     (void)SPI.transfer(d);
   } else {

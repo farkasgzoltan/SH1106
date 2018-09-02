@@ -147,7 +147,7 @@ class SH1106 : public Adafruit_GFX {
   void startscrolldiagleft(uint8_t start, uint8_t stop);
   void stopscroll(void); */
 
-  void dim(uint8_t contrast);
+  void dim(boolean contrast);
 
   void drawPixel(int16_t x, int16_t y, uint16_t color);
 
