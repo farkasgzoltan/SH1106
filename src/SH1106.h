@@ -152,7 +152,7 @@ class SH1106 : public Adafruit_GFX {
   void stopscroll(void); */
 
   void dim(boolean contrast);
-  void dimit(uint8_t contrast);
+  void setContrast(uint8_t contrast);
 
   void drawPixel(int16_t x, int16_t y, uint16_t color);
 

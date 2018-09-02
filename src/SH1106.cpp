@@ -511,7 +511,7 @@ void SH1106::dim(boolean dim) {
   SH1106_command(contrast);
 }
 
-void SH1106::dimit(uint8_t contrast) {
+void SH1106::setContrast(uint8_t contrast) {
   // the range of contrast to too small to be really useful
   // it is useful to dim the display
   SH1106_command(SH1106_SETCONTRAST);
