@@ -263,116 +263,108 @@ void SH1106::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
     // turn on VCC (9V?)
   }
 
-
-   #if defined SH1106_128_32
-    // Init sequence for 128x32 OLED module
-    SH1106_command(SH1106_DISPLAYOFF);                    // 0xAE
-    SH1106_command(SH1106_SETDISPLAYCLOCKDIV);            // 0xD5
-    SH1106_command(0x80);                                  // the suggested ratio 0x80
-    SH1106_command(SH1106_SETMULTIPLEX);                  // 0xA8
-    SH1106_command(0x1F);
-    SH1106_command(SH1106_SETDISPLAYOFFSET);              // 0xD3
-    SH1106_command(0x0);                                   // no offset
-    SH1106_command(SH1106_SETSTARTLINE | 0x0);            // line #0
-    SH1106_command(SH1106_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x10); }
-    else
-      { SH1106_command(0x14); }
-    SH1106_command(SH1106_MEMORYMODE);                    // 0x20
-    SH1106_command(0x00);                                  // 0x0 act like ks0108
-    SH1106_command(SH1106_SEGREMAP | 0x1);
-    SH1106_command(SH1106_COMSCANDEC);
-    SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
-    SH1106_command(0x02);
-    SH1106_command(SH1106_SETCONTRAST);                   // 0x81
-    SH1106_command(0x8F);
-    SH1106_command(SH1106_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x22); }
-    else
-      { SH1106_command(0xF1); }
-    SH1106_command(SH1106_SETVCOMDETECT);                 // 0xDB
-    SH1106_command(0x40);
-    SH1106_command(SH1106_DISPLAYALLON_RESUME);           // 0xA4
-    SH1106_command(SH1106_NORMALDISPLAY);                 // 0xA6
-  #endif
+  // Init sequence
+  SH1106_command(SH1106_DISPLAYOFF);                    // 0xAE
+  SH1106_command(SH1106_SETDISPLAYCLOCKDIV);            // 0xD5
 
   #if defined SH1106_128_64
     // Init sequence for 128x64 OLED module
-    SH1106_command(SH1106_DISPLAYOFF);                    // 0xAE
-    SH1106_command(SH1106_SETDISPLAYCLOCKDIV);            // 0xD5
-    SH1106_command(0x80);                                  // the suggested ratio 0x80
-    SH1106_command(SH1106_SETMULTIPLEX);                  // 0xA8
-    SH1106_command(0x3F);
-    SH1106_command(SH1106_SETDISPLAYOFFSET);              // 0xD3
-    SH1106_command(0x00);                                   // no offset
-
-    SH1106_command(SH1106_SETSTARTLINE | 0x0);            // line #0 0x40
-    SH1106_command(SH1106_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x10); }
-    else
-      { SH1106_command(0x14); }
-    SH1106_command(SH1106_MEMORYMODE);                    // 0x20
-    SH1106_command(0x00);                                  // 0x0 act like ks0108
-    SH1106_command(SH1106_SEGREMAP | 0x1);
-    SH1106_command(SH1106_COMSCANDEC);
-    SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
-    SH1106_command(0x12);
-    SH1106_command(SH1106_SETCONTRAST);                   // 0x81
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x9F); }
-    else
-      { SH1106_command(0xCF); }
-    SH1106_command(SH1106_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x22); }
-    else
-      { SH1106_command(0xF1); }
-    SH1106_command(SH1106_SETVCOMDETECT);                 // 0xDB
-    SH1106_command(0x40);
-    SH1106_command(SH1106_DISPLAYALLON_RESUME);           // 0xA4
-    SH1106_command(SH1106_NORMALDISPLAY);                 // 0xA6
-  #endif
-
-  #if defined SH1106_96_16
-    // Init sequence for 96x16 OLED module
-    SH1106_command(SH1106_DISPLAYOFF);                    // 0xAE
-    SH1106_command(SH1106_SETDISPLAYCLOCKDIV);            // 0xD5
-    SH1106_command(0x80);                                  // the suggested ratio 0x80
-    SH1106_command(SH1106_SETMULTIPLEX);                  // 0xA8
-    SH1106_command(0x0F);
-    SH1106_command(SH1106_SETDISPLAYOFFSET);              // 0xD3
-    SH1106_command(0x00);                                   // no offset
+    SH1106_command(0xF0);                                 // the suggested ratio 0xF0 XXXXXXXX
+    SH1106_command(SH1106_SETMULTIPLEX);                  // 0xA8 XXXXXXXXX
+    SH1106_command(0x3F);								   // XXXXXXXXXXX
+    SH1106_command(SH1106_OUTPUT_FOLLOWS_RAM);            // 0xA4 XXXXXXXXX
+    SH1106_command(SH1106_SETDISPLAYOFFSET);              // 0xD3 XXXXXXXXX
+    SH1106_command(0x0);                                  // no offset  XXXXXXXXX
     SH1106_command(SH1106_SETSTARTLINE | 0x0);            // line #0
-    SH1106_command(SH1106_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x10); }
-    else
-      { SH1106_command(0x14); }
-    SH1106_command(SH1106_MEMORYMODE);                    // 0x20
-    SH1106_command(0x00);                                  // 0x0 act like ks0108
-    SH1106_command(SH1106_SEGREMAP | 0x1);
-    SH1106_command(SH1106_COMSCANDEC);
-    SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
-    SH1106_command(0x2);	//ada x12
-    SH1106_command(SH1106_SETCONTRAST);                   // 0x81
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x10); }
-    else
-      { SH1106_command(0xAF); }
-    SH1106_command(SH1106_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SH1106_EXTERNALVCC)
-      { SH1106_command(0x22); }
-    else
-      { SH1106_command(0xF1); }
-    SH1106_command(SH1106_SETVCOMDETECT);                 // 0xDB
-    SH1106_command(0x40);
-    SH1106_command(SH1106_DISPLAYALLON_RESUME);           // 0xA4
-    SH1106_command(SH1106_NORMALDISPLAY);                 // 0xA6
+    SH1106_command(SH1106_CHARGEPUMP);                    // 0x8D XXXXXXXXXX
+    if (vccstate == SH1106_EXTERNALVCC)					   // XXXXXXXXX
+      { SH1106_command(0x10); }						   // XXXXXXXXX
+    else												   // XXXXXXXXX
+      { SH1106_command(0x14); }						   // XXXXXXXXX
+    SH1106_command(SH1106_MEMORYMODE);                    // 0x20 XXXXXXXXXXXXXX
+//    SH1106_command(PAGE);                                  // 0x2 Paged XXXXXXXXXXX
+    SH1106_command(HORIZONTAL);                                  // 0x0 Horizontal XXXXXXXXXXX
+    SH1106_command(SH1106_SET_PAGE_ADDRESS); // start at page address 0 XXXXXXXXX
+//    SH1106_command(SH1106_SEGREMAP | 0x1);				   // ?????????????
+    SH1106_command(SH1106_COMSCANDEC);					   // XXXXXXXXXX
+    SH1106_command(SH1106_SETLOWCOLUMN);				   // XXXXXXXXXX
+    SH1106_command(SH1106_SETHIGHCOLUMN);				   // XXXXXXXXXX
+    SH1106_command(SH1106_SETCOMPINS);                    // 0xDA XXXXXXXXX
+    SH1106_command(0x12);								   // XXXXXXXXXX
+    SH1106_command(SH1106_SETCONTRAST);                   // 0x81 XXXXXXXX
+    if (vccstate == SH1106_EXTERNALVCC)					   // XXXXXXX
+      { SH1106_command(0x9F); }						   // XXXXXXX
+    else					   							   // XXXXXXX
+      { SH1106_command(0xCF); }					       // XXXXXXX
+    SH1106_command(SH1106_SET_SEGMENT_REMAP);             // 0xA1 XXXXXXXX
+    SH1106_command(SH1106_SETPRECHARGE);                  // 0xd9 XXXXXXXXX
+    if (vccstate == SH1106_EXTERNALVCC)					   // XXXXXXXXX
+      { SH1106_command(0x22); }						   // XXXXXXXXX
+    else												   // XXXXXXXXX
+      { SH1106_command(0xF1); }						   // XXXXXXXXX
+    SH1106_command(SH1106_SETVCOMDETECT);                 // 0xDB XXXXXXXX
+    SH1106_command(0x20);								   // 0.77xVcc XXXXXXX
+    SH1106_command(SH1106_DISPLAYALLON_RESUME);           // 0xA4 XXXXXXXXXX
+    SH1106_command(SH1106_NORMALDISPLAY);                 // 0xA6  XXXXXXXXXX
   #endif
 
+/*
+  SH1106_command(0x80);                                  // the suggested ratio 0x80
+
+  SH1106_command(SH1106_SETMULTIPLEX);                  // 0xA8
+  SH1106_command(SH1106_LCDHEIGHT - 1);
+
+  SH1106_command(SH1106_SETDISPLAYOFFSET);              // 0xD3
+  SH1106_command(0x0);                                   // no offset
+  SH1106_command(SH1106_SETSTARTLINE | 0x0);            // line #0
+  SH1106_command(SH1106_CHARGEPUMP);                    // 0x8D
+  if (vccstate == SH1106_EXTERNALVCC)
+    { SH1106_command(0x10); }
+  else
+    { SH1106_command(0x14); }
+  SH1106_command(SH1106_MEMORYMODE);                    // 0x20
+  SH1106_command(0x00);                                  // 0x0 act like ks0108
+  SH1106_command(SH1106_SEGREMAP | 0x1);
+  SH1106_command(SH1106_COMSCANDEC);
+
+ #if defined SH1106_128_32
+  SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
+  SH1106_command(0x02);
+  SH1106_command(SH1106_SETCONTRAST);                   // 0x81
+  SH1106_command(0x8F);
+
+#elif defined SH1106_128_64
+  SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
+  SH1106_command(0x12);
+  SH1106_command(SH1106_SETCONTRAST);                   // 0x81
+  if (vccstate == SH1106_EXTERNALVCC)
+    { SH1106_command(0x9F); }
+  else
+    { SH1106_command(0xCF); }
+
+#elif defined SH1106_96_16
+  SH1106_command(SH1106_SETCOMPINS);                    // 0xDA
+  SH1106_command(0x2);   //ada x12
+  SH1106_command(SH1106_SETCONTRAST);                   // 0x81
+  if (vccstate == SH1106_EXTERNALVCC)
+    { SH1106_command(0x10); }
+  else
+    { SH1106_command(0xAF); }
+
+#endif
+
+  SH1106_command(SH1106_SETPRECHARGE);                  // 0xd9
+  if (vccstate == SH1106_EXTERNALVCC)
+    { SH1106_command(0x22); }
+  else
+    { SH1106_command(0xF1); }
+  SH1106_command(SH1106_SETVCOMDETECT);                 // 0xDB
+  SH1106_command(0x40);
+  SH1106_command(SH1106_DISPLAYALLON_RESUME);           // 0xA4
+  SH1106_command(SH1106_NORMALDISPLAY);                 // 0xA6
+
+  SH1106_command(SH1106_DEACTIVATE_SCROLL);
+*/
   SH1106_command(SH1106_DISPLAYON);//--turn on oled panel
 }
 
@@ -515,8 +507,8 @@ void SH1106::dim(boolean dim) {
 void SH1106::dimit(uint8_t contrast) {
   // the range of contrast to too small to be really useful
   // it is useful to dim the display
-  ssd1306_command(SH1106_SETCONTRAST);
-  ssd1306_command(contrast);
+  SH1106_command(SH1106_SETCONTRAST);
+  SH1106_command(contrast);
 }
 
 /*#define SH1106_SETLOWCOLUMN 0x00
@@ -525,75 +517,68 @@ void SH1106::dimit(uint8_t contrast) {
 
 void SH1106::display(void) {
 
-    SH1106_command(SH1106_SETLOWCOLUMN | 0x0);  // low col = 0
-    SH1106_command(SH1106_SETHIGHCOLUMN | 0x0);  // hi col = 0
-    SH1106_command(SH1106_SETSTARTLINE | 0x0); // line #0
-
-    //Serial.println(TWBR, DEC);
-    //Serial.println(TWSR & 0x3, DEC);
-
-    // I2C
-    //height >>= 3;
-    //width >>= 3;
-    byte height=64;
-    byte width=132;
-    byte m_row = 0;
-    byte m_col = 2;
-
-
-    height >>= 3;
-    width >>= 3;
-    //Serial.println(width);
-
-    int p = 0;
-    byte i, j, k =0;
-
-    if(sid != -1)
+    int k = 0;
+    for (int page = 0; page < SH1106_MAX_PAGE_COUNT; page++)
     {
-      for ( i = 0; i < height; i++) {
-        // send a bunch of data in one xmission
-        SH1106_command(0xB0 + i + m_row);//set page address
-        SH1106_command(m_col & 0xf);//set lower column address
-        SH1106_command(0x10 | (m_col >> 4));//set higher column address
+        SH1106_command(SH1106_SET_PAGE_ADDRESS + page);
+        SH1106_command(0x02); // low column start address
+        SH1106_command(0x10); // high column start address
 
-        for( j = 0; j < 8; j++){
-            // SPI
-            digitalWrite(cs, HIGH);
-            digitalWrite(dc, HIGH);
-            digitalWrite(cs, LOW);
+		if (sid != -1)
+		{
+			 for (int pixel = 0; pixel < SH1106_LCDWIDTH; pixel++)
+			 {	
+				// SPI
+				#ifdef HAVE_PORTREG
+					*csport |= cspinmask;
+					*dcport |= dcpinmask;
+					*csport &= ~cspinmask;
+				#else
+					digitalWrite(cs, HIGH);
+					digitalWrite(dc, HIGH);
+					digitalWrite(cs, LOW);
+				#endif
 
-            for ( k = 0; k < width; k++, p++) {
-                fastSPIwrite(buffer[p]);
-            }
-              digitalWrite(cs, HIGH);
-        }
-      }
+				fastSPIwrite(buffer[(page << 7) + pixel]);  // Page * 128 + pixel
 
-    }
-    else {
-#ifdef TWBR
-      uint8_t twbrbackup = TWBR;
-      TWBR = 12; // upgrade to 400KHz!
-#endif
-      for ( i = 0; i < height; i++) {
-        // send a bunch of data in one xmission
-        SH1106_command(0xB0 + i + m_row);//set page address
-        SH1106_command(m_col & 0xf);//set lower column address
-        SH1106_command(0x10 | (m_col >> 4));//set higher column address
+				#ifdef HAVE_PORTREG
+					*csport |= cspinmask;
+				#else
+					digitalWrite(cs, HIGH);
+				#endif
+				
+			}
+		}
+		else
+		{
+				// save I2C bitrate
+// save I2C bitrate
+			#ifdef TWBR
+				uint8_t twbrbackup = TWBR;
+				TWBR = 12; // upgrade to 400KHz!
+			#endif
 
-        for( j = 0; j < 8; j++){
-            Wire.beginTransmission(_i2caddr);
-            Wire.write(0x40);
-            for ( k = 0; k < width; k++, p++) {
-                Wire.write(buffer[p]);
-            }
-                Wire.endTransmission();
-        }
-#ifdef TWBR
-        TWBR = twbrbackup;
-#endif
-      }
-    }
+			//Serial.println(TWBR, DEC);
+			//Serial.println(TWSR & 0x3, DEC);
+
+			// I2C
+			for (uint16_t i=0; i<8; i++) {
+				// send a bunch of data in one xmission
+				Wire.beginTransmission(_i2caddr);
+				Wire.write(0x40);
+				for (uint8_t x=0; x<16; x++) {
+				//for (uint8_t x=0; x<16; x++, k++) {
+					Wire.write(buffer[k]);
+					k++;
+				}
+				  
+				Wire.endTransmission();
+			}
+			#ifdef TWBR
+				TWBR = twbrbackup;
+			#endif
+		}
+	}
 }
 
 void SH1106::clearDisplay(void) {
