@@ -369,7 +369,7 @@ void SH1106::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   SH1106_command(SH1106_DISPLAYON);//--turn on oled panel
 }
 
-void Adafruit_SH1106::flipScreenVertically() {
+void SH1106::flipScreenVertically() {
   SH1106_command(0xA0);              //SEGREMAP   //Rotate screen 180 deg
   SH1106_command(SH1106_SETCOMPINS);
   SH1106_command(0x22);
