@@ -247,6 +247,7 @@ void SH1106::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
     TWI1->TWI_CWGR = 0;
     TWI1->TWI_CWGR = ((VARIANT_MCK / (2 * 400000)) - 4) * 0x101;
 #endif
+    delay(100); //required to properly power on
   }
   if ((reset) && (rst >= 0)) {
     // Setup reset pin direction (used by both SPI and I2C)
